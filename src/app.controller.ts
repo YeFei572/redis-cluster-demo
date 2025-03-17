@@ -13,7 +13,7 @@ export class AppController {
   @Get('test')
   getHello(): any {
     for (let i = 0; i < 100; i++) {
-      this.redisService.set('test', i.toString());
+      this.redisService.set('test' + i, i.toString());
     }
     return this.redisService.get('test');
   }
