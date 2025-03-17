@@ -84,7 +84,10 @@ export class RedisClusterService implements OnModuleInit, OnModuleDestroy {
 
   async mget(keys: string[]): Promise<string[]> {
     try {
-      return await this.client.mget(keys);
+      const multi = this.client.multi();
+      keys.forEach(key => multi.get(key));
+      const result = await multi.exec();
+      return result.map(r => r[1] as string);
     } catch (error) {
       this.logger.error(`Error getting keys ${keys}:`, error);
       throw error;
