@@ -21,7 +21,7 @@ export class RedisClusterService implements OnModuleInit, OnModuleDestroy {
 
       this.client = new Redis.Cluster(nodes, {
         ...options,
-        scaleReads: 'all',
+        scaleReads: 'master',
         clusterRetryStrategy: (times) => {
           const delay = Math.min(times * 50, 2000);
           return delay;
@@ -78,6 +78,15 @@ export class RedisClusterService implements OnModuleInit, OnModuleDestroy {
       return await this.client.get(key);
     } catch (error) {
       this.logger.error(`Error getting key ${key}:`, error);
+      throw error;
+    }
+  }
+
+  async mget(keys: string[]): Promise<string[]> {
+    try {
+      return await this.client.mget(keys);
+    } catch (error) {
+      this.logger.error(`Error getting keys ${keys}:`, error);
       throw error;
     }
   }

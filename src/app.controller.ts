@@ -9,10 +9,13 @@ export class AppController {
   ) { }
 
   @Get('test')
-  getHello(): any {
+  async getHello(): Promise<any> {
+    const keys = [];
     for (let i = 0; i < 100; i++) {
-      this.redisClusterService.set('test' + i, i.toString());
+      keys.push('test' + i);
+      await this.redisClusterService.set('test' + i, i.toString());
     }
-    return this.redisClusterService.get('test');
+    const result = await this.redisClusterService.mget(keys);
+    return result;
   }
 }
