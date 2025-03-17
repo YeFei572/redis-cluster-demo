@@ -86,6 +86,7 @@ export class RedisClusterService implements OnModuleInit, OnModuleDestroy {
     try {
       console.log(keys.length)
       const results = await Promise.all(keys.map(key => this.client.get(key)));
+      console.log(results)
       return results.filter(result => result !== null) as string[];
     } catch (error) {
       this.logger.error(`Error getting keys ${keys}:`, error);
