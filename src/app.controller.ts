@@ -1,9 +1,10 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
 import { AppService } from './app.service';
 import { RedisService } from './redis/redis.service';
 
 @Controller()
 export class AppController {
+  private readonly logger = new Logger(AppController.name);
   constructor(
     private readonly appService: AppService,
     private readonly redisService: RedisService,
@@ -11,7 +12,9 @@ export class AppController {
 
   @Get('test')
   getHello(): any {
-    this.redisService.set('test', 'test');
+    for (let i = 0; i < 100; i++) {
+      this.redisService.set('test', i.toString());
+    }
     return this.redisService.get('test');
   }
 }
