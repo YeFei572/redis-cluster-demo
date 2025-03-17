@@ -21,7 +21,7 @@ export class RedisClusterService implements OnModuleInit, OnModuleDestroy {
 
       this.client = new Redis.Cluster(nodes, {
         ...options,
-        scaleReads: 'master',
+        scaleReads: 'all',
         clusterRetryStrategy: (times) => {
           const delay = Math.min(times * 50, 2000);
           return delay;
