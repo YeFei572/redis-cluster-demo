@@ -1,6 +1,6 @@
 import { Controller, Get, Logger } from '@nestjs/common';
 import { AppService } from './app.service';
-import { RedisService } from './redis/redis.service';
+import { RedisService } from './redis/redis-cluster.service';
 
 @Controller()
 export class AppController {
@@ -8,7 +8,7 @@ export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly redisService: RedisService,
-  ) {}
+  ) { }
 
   @Get('test')
   getHello(): any {
