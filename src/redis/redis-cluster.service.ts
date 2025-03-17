@@ -109,4 +109,22 @@ export class RedisClusterService implements OnModuleInit, OnModuleDestroy {
       throw error;
     }
   }
+
+  // 扫描键
+  async scan(pattern: string): Promise<string[]> {
+    const keys: string[] = [];
+    let cursor = '0';
+    do {
+      const [newCursor, matchedKeys] = await this.client.scan(
+        cursor,
+        'MATCH',
+        pattern,
+        'COUNT',
+        100
+      );
+      cursor = newCursor;
+      keys.push(...matchedKeys);
+    } while (cursor !== '0');
+    return keys;
+  }
 }

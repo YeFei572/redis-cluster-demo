@@ -12,10 +12,16 @@ export class AppController {
   async getHello(): Promise<any> {
     const keys = [];
     for (let i = 0; i < 100; i++) {
-      keys.push('test' + i);
-      await this.redisClusterService.set('test' + i, i.toString());
+      keys.push('f:test' + i);
+      await this.redisClusterService.set('f:test' + i, i.toString());
     }
     const result = await this.redisClusterService.mget(keys);
+    return result;
+  }
+
+  @Get('scan')
+  async scan(): Promise<any> {
+    const result = await this.redisClusterService.scan('f:*');
     return result;
   }
 }
