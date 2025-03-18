@@ -1,19 +1,23 @@
+import { ClusterModule } from '@liaoliaots/nestjs-redis';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { RedisModule } from './redis/redis.module';
-import redisConfig from './config/redis.config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      load: [redisConfig],
-      isGlobal: true,
-    }),
-    RedisModule,
+    ClusterModule.forRoot({
+      config: {
+        nodes: [
+          { host: process.env.REDIS_HOST, port: Number(process.env.REDIS_PORT) }
+        ],
+        redisOptions: {
+          password: process.env.REDIS_PASSWORD,
+          db: Number(process.env.REDIS_DB)
+        }
+      }
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
